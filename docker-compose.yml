@@ -1,0 +1,106 @@
+version: '3.4'
+
+services:
+
+  rmq:
+    hostname: "rmq"
+    container_name: "rmq"
+    image: "rabbitmq:latest"
+    #image: "rabbitmq:alpine"
+    networks:
+      - "fakenet"
+    ports:
+      - "5672:5672"
+    healthcheck:
+      test: "rabbitmq-diagnostics -q ping"
+      interval: 30s
+      timeout: 30s
+      retries: 3
+
+  pdb:
+    # Checkout https://hub.docker.com/_/postgres for more info
+    hostname: "pdb"
+    container_name: "pdb"
+    image: "postgres:latest"
+    #image: "postgres:alpine"
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: test_db
+    ports:
+      - 5432:5432
+    networks:
+      - "fakenet"
+    volumes:
+      #- "../dbase:/docker-entrypoint-initdb.d" # This is for initialization scripts
+      - "../dbase:/var/lib/postgresql/data" # This is for data persistence
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  workenv:
+    hostname: "workenv"
+    container_name: "workenv"
+    image: "aiida_devenv:v0.1"
+      #    expose:
+      #      - "8888" # AiiDa Lab
+      #      - "8890" # Jupyter Lab
+      #      - "5000" # REST API
+      #    ports: # local:container
+      #      - 8888:8888
+      #      - 8890:8890
+      #      - 5000:5000
+    #      
+    # privileged mode and mounting the cgroup required for correctly running sytsemd
+    # inside the container (set as the default command)
+    #
+    #    privileged: true
+    volumes:
+      #      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+      - "../codes:/home/devuser/codes"
+      - "../aiida:/home/devuser/.aiida"
+    depends_on:
+      pdb:
+        condition: service_healthy
+      rmq:
+        condition: service_healthy
+    networks:
+      - "fakenet"
+        #    environment:
+        #      LC_ALL: "en_US.UTF-8"
+        #      LANG: "en_US.UTF-8"
+        #      RMQ_HOST: redis
+        #      RMQ_PORT: 6379
+        #      PSQL_HOST: db
+        #      PSQL_PORT: 3306
+    command: "tail -f /dev/null"
+      #healthcheck:
+      # check that the daemon has been started for the 'generic' profile
+      # can take a few minutes to start
+      # test: systemctl is-active --quiet aiida-daemon@generic.service
+      # start_period: 30s
+      # interval: 30s
+      # timeout: 5s
+      # retries: 6
+      #
+      # OTHER check
+      #      test: bash -c "[ -f /tmp/a ]"
+      #      start_period: 30s
+      #      interval: 30s
+      #      timeout: 5s
+      #      retries: 6
+
+      # check that the daemon has been started for the 'generic' profile
+      # can take a few minutes to start
+      # test: systemctl is-active --quiet aiida-daemon@generic.service
+      # start_period: 30s
+      # interval: 30s
+      # timeout: 5s
+      # retries: 6
+
+networks:
+  fakenet:
+    driver: bridge
+
