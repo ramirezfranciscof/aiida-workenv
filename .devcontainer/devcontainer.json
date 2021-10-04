@@ -1,0 +1,14 @@
+{
+    "name": "AiiDA development environment",
+    "dockerComposeFile": "../docker-compose.yml",
+    "service": "workenv",
+    "workspaceFolder": "/workspace",
+
+	"extensions": [
+		"ms-python.python",
+		"ms-python.vscode-pylance",
+		"ms-azuretools.vscode-docker",
+	    	"streetsidesoftware.code-spell-checker",
+		"chrisjsewell.aiida-explore-vscode"
+	]
+}

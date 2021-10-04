@@ -1,0 +1,31 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.187.0/containers/docker-existing-dockerfile
+// https://github.com/microsoft/vscode-dev-containers/tree/main/containers/python-3-postgres
+{
+    "name": "AiiDA development environment",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "main",
+    "workspaceFolder": "/workspace",
+
+	// Set *default* container specific settings.json values on container create.
+	"settings": {
+            "editor.rulers": [100],
+            "python.pythonPath": "/usr/local/bin/python",
+		"python.defaultInterpreterPath": "/usr/local/bin/python",
+            "python.languageServer": "Pylance",
+		"python.linting.enabled": true,
+		"python.linting.pylintEnabled": true,
+            "python.linting.pylintPath": "/usr/local/py-utils/bin/pylint",
+            "python.formatting.provider": "yapf",
+            "python.formatting.yapfPath": "/usr/local/py-utils/bin/yapf"
+        },
+	
+	// Add the IDs of extensions you want installed when the container is created.
+	"extensions": [
+		"ms-python.python",
+		"ms-python.vscode-pylance",
+		"ms-azuretools.vscode-docker",
+	    	"streetsidesoftware.code-spell-checker",
+		"chrisjsewell.aiida-explore-vscode"
+	]
+}
