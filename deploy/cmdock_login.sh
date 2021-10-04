@@ -1,4 +1,5 @@
 #!/bin/zsh
 
-docker exec -it workenv /bin/bash
-
+#DIRNAME=${PWD##*/}
+DIRNAME=$(basename $(dirname "$PWD"))
+docker exec -it --user devuser ${DIRNAME}_workenv_1 /bin/bash

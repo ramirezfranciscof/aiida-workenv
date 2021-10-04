@@ -1,4 +1,3 @@
 #!/bin/zsh
-
-docker-compose -p "coredev" down -v
-
+cd ..
+docker-compose down -v
