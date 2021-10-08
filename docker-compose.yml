@@ -66,8 +66,8 @@ services:
       - 8890 #:8890
       - 5000 #:5000
     volumes:
-      - "./data/codes:/home/devuser/codes"
-      - "./data/aiida:/home/devuser/.aiida"
+      - "./data/codes:/root/codes"
+      - "./data/aiida:/root/.aiida"
     depends_on:
       pdb:
         condition: service_healthy

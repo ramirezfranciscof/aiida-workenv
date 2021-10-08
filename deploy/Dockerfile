@@ -11,7 +11,7 @@ FROM phusion/baseimage:bionic-1.0.0
 ################################################################################
 
 
-# APT GET INSTALLS
+# APT GET BASE INSTALLS
 #------------------------------------------------------------------------------#
 RUN apt-get update && apt-get install -y \
     bash-completion \
@@ -36,21 +36,24 @@ RUN apt-get update && apt-get install -y \
 
 # USER SETUP & STARTUP
 #------------------------------------------------------------------------------#
-ARG USERNAME="devuser"
-ARG USERPASS="devpass"
+#ARG USERNAME="devuser"
+#ARG USERPASS="devpass"
 
-RUN useradd --create-home --shell /bin/bash $USERNAME
-RUN adduser $USERNAME sudo
-RUN echo "$USERNAME:$USERPASS" | chpasswd
+#RUN useradd --create-home --shell /bin/bash $USERNAME
+#RUN adduser $USERNAME sudo
+#RUN echo "$USERNAME:$USERPASS" | chpasswd
 
 #USER $USERNAME # This breaks the init
-WORKDIR /home/${USERNAME}
-ENV SYSTEM_USER ${USERNAME}
+#WORKDIR /home/${USERNAME}
+#ENV SYSTEM_USER ${USERNAME}
+#ENV LOGFILE_PATH=/home/devuser/init.log
 
+ENV LOGFILE=/root/init.log
+WORKDIR /root
 
 # CONDA & PYTHON
 #------------------------------------------------------------------------------#
-ENV CONDA_DIR /home/$USERNAME/miniconda
+ENV CONDA_DIR /opt/miniconda
 ENV PATH $CONDA_DIR/bin:$PATH
 
 ENV PYTHON_VERSION py39
@@ -81,9 +84,10 @@ RUN cd /tmp && \
 # SETTING UP THE INIT SCRIPTS AND PROFILE
 #------------------------------------------------------------------------------#
 COPY my_init.d/setup_conda.sh /etc/my_init.d/21_setup_conda.sh
+COPY my_init.d/setup_aiida.sh /etc/my_init.d/22_setup_aiida.sh
 
-#COPY profile.d/activate_conda.sh /etc/profile.d/
-COPY profile.d/verdi_complete.sh /etc/profile.d/
+COPY profile.d/activate_conda.sh /etc/profile.d/.
+COPY profile.d/verdi_complete.sh /etc/profile.d/.
 
 CMD ["/sbin/my_init"]
 
