@@ -1,4 +1,8 @@
 # Ignore everything in this directory
-*
+aiida/*
+dbase/*
+ssh/*
+workdir/*
+
 # Except this file
-!.gitignore
+#!.gitignore

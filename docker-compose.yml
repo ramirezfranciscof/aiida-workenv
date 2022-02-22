@@ -55,9 +55,9 @@ services:
       - 8890 #:8890
       - 5000 #:5000
     volumes:
-      - "./data/codes:/root/codes"
-      - "./data/aiida:/root/.aiida"
       - "./data/ssh:/root/.ssh"
+      - "./data/aiida:/root/.aiida"
+      - "./data/workdir:/root/workdir"
       - "./data/config/init_extras.sh:/etc/my_init.d/30_init_extras.sh"
       - "./data/config/profile_extras.sh:/etc/profile.d/profile_extras.sh"
       - "./data/config/bashrc_extras.sh:/root/.bashrc_extras"
